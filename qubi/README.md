@@ -3,13 +3,13 @@
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) and Tailwind CSS
 
 First, once you have cloned this repository and typed "cd qubi" run the command:
-``bash
+``
 npm install
 ``
 
 After the installation of required packages run the following command:
 
-``bash
+``
 npm start
 ``
 

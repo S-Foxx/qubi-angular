@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LlmService } from './services/llm.service';
 import { ChatMessage } from './services/llm.service';
@@ -8,7 +7,7 @@ import { ChatMessage } from './services/llm.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -21,6 +20,9 @@ export class AppComponent implements OnInit {
   isLoading = false;
   modelLoadProgress = '';
   modelInitialized = false;
+  autoLoadModel = true;
+  cacheStatus: 'unknown' | 'checking' | 'not-found' | 'found' = 'unknown';
+  private loadPromptShown = false;
 
   constructor(private llmService: LlmService) {}
 
@@ -49,6 +51,23 @@ export class AppComponent implements OnInit {
         });
       }
     });
+    
+    // Subscribe to cache status
+    this.llmService.cacheStatus.subscribe((status) => {
+      this.cacheStatus = status;
+      
+      // If no model in cache, show a message guiding the user to load the model
+      if (status === 'not-found' && this.autoLoadModel) {
+        this.showLoadModelPrompt();
+      }
+    });
+    
+    // Check auto-load setting
+    this.autoLoadModel = localStorage.getItem('autoLoadModel') !== 'false';
+
+    if (this.autoLoadModel) {
+      this.llmService.toggleAutoLoad(this.autoLoadModel);
+    }
   }
 
   toggleDarkMode() {
@@ -82,6 +101,18 @@ export class AppComponent implements OnInit {
     this.isLoading = true;
 
     try {
+      if (!this.modelInitialized) {
+        // Model not initialized yet, show a message about loading the model
+        setTimeout(() => {
+          this.messages.push({ 
+            role: 'ai', 
+            content: 'Please load the model first by clicking "Load Model" in the menu before I can respond to your message.' 
+          });
+          this.isLoading = false;
+        }, 500);
+        return;
+      }
+
       const response = await this.llmService.chat(userMessage);
       this.messages.push({ role: 'ai', content: response });
     } catch (error) {
@@ -98,5 +129,36 @@ export class AppComponent implements OnInit {
     } catch (error) {
       console.error('Error loading model:', error);
     }
+  }
+  
+  toggleAutoLoad() {
+    this.autoLoadModel = !this.autoLoadModel;
+    this.llmService.toggleAutoLoad(this.autoLoadModel);
+    
+    // Show a message to the user about the change
+    if (this.autoLoadModel && !this.modelInitialized) {
+      this.messages.push({
+        role: 'ai',
+        content: 'Auto-load enabled. Checking for cached model...'
+      });
+    } else if (!this.autoLoadModel) {
+      this.messages.push({
+        role: 'ai',
+        content: 'Auto-load disabled. The model will need to be loaded manually when you reload the page.'
+      });
+    }
+  }
+
+  private showLoadModelPrompt() {
+    // Wait a bit to ensure first greeting is displayed first
+    setTimeout(() => {
+      if (!this.modelInitialized && this.cacheStatus === 'not-found' && !this.loadPromptShown) {
+        this.messages.push({
+          role: 'ai',
+          content: 'I notice the AI model isn\'t loaded yet. Please click the "Load Model" button in the menu to enable full functionality.'
+        });
+        this.loadPromptShown = true;
+      }
+    }, 1500);
   }
 }

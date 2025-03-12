@@ -27,6 +27,15 @@
             </svg>
             Settings
           </a>
+          <button 
+            (click)="toggleAutoLoad()" 
+            class="block w-full text-left px-4 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+            </svg>
+            Auto-Load Model: {{ autoLoadModel ? 'On' : 'Off' }}
+          </button>
           <a href="#" class="block px-4 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
@@ -35,13 +44,17 @@
           </a>
           <button 
             (click)="loadModel()" 
-            class="block px-4 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text"
+            class="block w-full text-left px-4 py-2 hover:bg-light-hover dark:hover:bg-dark-hover text-light-text dark:text-dark-text"
             [disabled]="modelLoadProgress !== ''"
+            [ngClass]="{'bg-primary-100 dark:bg-primary-900 font-medium': cacheStatus === 'not-found' && !modelInitialized}"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
             </svg>
-            Load Model
+            <span [ngClass]="{'animate-pulse': cacheStatus === 'not-found' && !modelInitialized}">
+              Load Model
+              <span *ngIf="cacheStatus === 'not-found' && !modelInitialized" class="ml-1 text-xs px-1 py-0.5 bg-primary-500 text-white rounded-full">Required</span>
+            </span>
           </button>
           <div *ngIf="modelLoadProgress" class="p-2 text-sm">
             <div class="mb-1 font-medium">Loading Model:</div>
@@ -71,8 +84,14 @@
     </header>
     
     <!-- Model Loading Progress (hidden when not loading) -->
-    <div *ngIf="modelLoadProgress" class="bg-light-bg dark:bg-dark-bg p-2 text-sm text-light-text dark:text-dark-text border-b border-light-border dark:border-dark-border">
-      {{ modelLoadProgress }}
+    <div *ngIf="modelLoadProgress || (!modelInitialized && cacheStatus === 'not-found')" class="bg-light-bg dark:bg-dark-bg p-2 text-sm text-light-text dark:text-dark-text border-b border-light-border dark:border-dark-border">
+      <div *ngIf="modelLoadProgress">{{ modelLoadProgress }}</div>
+      <div *ngIf="!modelLoadProgress && !modelInitialized && cacheStatus === 'not-found'" class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        <span>Model not loaded. Click the menu and select "Load Model" to enable AI responses.</span>
+      </div>
     </div>
     
     <!-- Conversation Area -->
@@ -104,22 +123,22 @@
     
     <!-- Input Area -->
     <div class="p-4 bg-light-card dark:bg-dark-card border-t border-light-border dark:border-dark-border enhanced-shadow">
-      <form (ngSubmit)="sendMessage()" class="flex items-center">
+      <form (ngSubmit)="sendMessage()" class="flex items-stretch">
         <textarea 
           [(ngModel)]="userInput" 
           name="userInput"
           (keydown.enter)="$event.preventDefault(); sendMessage()"
           placeholder="Type your message..."
-          class="flex-1 p-2 rounded-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-primary-500 bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text resize-none"
+          class="flex-1 p-2 rounded-l-lg border border-light-border dark:border-dark-border focus:outline-none focus:ring-2 focus:ring-primary-500 bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text resize-none"
           rows="3"
           [disabled]="isLoading"
         ></textarea>
         <button 
           type="submit"
-          class="ml-2 p-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed h-24 w-16"
-          [disabled]="isLoading || !userInput.trim() || !modelInitialized"
+          class="aspect-square p-2 w-24 h-24 rounded-r-lg bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="isLoading || !userInput.trim()"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-9 h-9 mx-auto">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
           </svg>
         </button>

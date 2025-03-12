@@ -1,67 +1,36 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 # Compiled output
-/dist
 qubi/dist
-/tmp
-/out-tsc
-/bazel-out
-
+qubi/tmp
+qubi/out-tsc
+qubi/bazel-out
 # Node
-/node_modules
 qubi/node_modules
-npm-debug.log
-yarn-error.log
-
+qubi/npm-debug.log
+qubi/yarn-error.log
 # IDEs and editors
-.idea/
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
+qubi/.idea/
+qubi/.project
+qubi/.classpath
+qubi/.c9/
+qubi/*.launch
+qubi/.settings/
+qubi/*.sublime-workspace
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
-
+qubi/.vscode/*
+!qubi/.vscode/settings.json
+!qubi/.vscode/tasks.json
+!qubi/.vscode/launch.json
+!qubi/.vscode/extensions.json
+qubi/.history/*
 # Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
+qubi/.angular/cache
+qubi/.sass-cache/
+qubi/connect.lock
+qubi/coverage
+qubi/libpeerconnection.log
+qubi/testem.log
+qubi/typings
 # System files
-.DS_Store
-Thumbs.db
-
-# Environment files
-/src/environments/*.js
-/src/environments/*.js.map
-
-# Web assembly and model files
-*.wasm
-*.bin
-
-# IndexedDB local cached data
-# This doesn't need to be explicitly ignored as it's stored in browser
-# but if any exports exist, they should be ignored
-*.idb
-indexed-db-exports/
-
-# Large model files that should be downloaded at runtime
-/src/assets/models/
-
-# Build configurations
-.angular
-
-# Cache directories
-.cache/
+qubi/.DS_Store
+qubi/Thumbs.db

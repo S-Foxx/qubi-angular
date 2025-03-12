@@ -1,59 +1,48 @@
 # Qubi
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) and Tailwind CSS
 
-## Development server
+First, once you have cloned this repository and typed "cd qubi" run the command:
+``bash
+npm install
+``
 
-To start a local development server, run:
+After the installation of required packages run the following command:
 
-```bash
-ng serve
-```
+``bash
+npm start
+``
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Running the app
 
-## Code scaffolding
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. 
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Using the app
 
-```bash
-ng generate component component-name
-```
+On your first run of the application you will need to load the model.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Click the 3 lines in the top left corner. This is the menu button
 
-```bash
-ng generate --help
-```
+Click "Load Model". This will download the model into your browser's cache. It may take time depending on your internet connection speeds.
 
-## Building
+Once the model has finished loading, you can chat with the model freely.
 
-To build the project run:
+## Basic Usage
 
-```bash
-ng build
-```
+You can toggle "Auto-Load" On/Off to determine if you want the model to automatically load when the page refreshes or if you've closed the browser and reloaded the page.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Note: As long as the cache has not been cleared there will be a model loaded in browser memory storage.
 
-## Running unit tests
+You can also toggle light/dark theme by clicking the button in the top right corner of the chat window.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Uninstallation
 
-```bash
-ng test
-```
+Follow instructions provided by your browser to clear the cache for this particular site. If running locally it should be localhost:4200
 
-## Running end-to-end tests
+## Feedback
 
-For end-to-end (e2e) testing, run:
+Please direct all feedback and inquiries to Sabir Foux at https://www.linkedin.com/in/sabir-foux/ or reach out by email at SabirHFoux@Gmail.com
 
-```bash
-ng e2e
-```
+## Additional Info
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This is primarily a research and development project to determine the best possible use cases for local large language model that operate within the browser or a model device (To be developed). More features will be added soon. Feedback is always requested.

@@ -1,0 +1,36 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Compiled output
+qubi/dist
+qubi/tmp
+qubi/out-tsc
+qubi/bazel-out
+# Node
+qubi/node_modules
+qubi/npm-debug.log
+qubi/yarn-error.log
+# IDEs and editors
+qubi/.idea/
+qubi/.project
+qubi/.classpath
+qubi/.c9/
+qubi/*.launch
+qubi/.settings/
+qubi/*.sublime-workspace
+# Visual Studio Code
+qubi/.vscode/*
+!qubi/.vscode/settings.json
+!qubi/.vscode/tasks.json
+!qubi/.vscode/launch.json
+!qubi/.vscode/extensions.json
+qubi/.history/*
+# Miscellaneous
+qubi/.angular/cache
+qubi/.sass-cache/
+qubi/connect.lock
+qubi/coverage
+qubi/libpeerconnection.log
+qubi/testem.log
+qubi/typings
+# System files
+qubi/.DS_Store
+qubi/Thumbs.db
